@@ -1,0 +1,19 @@
+{
+    "name": "pipeg/suplos",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Pipeg\\Suplos\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "David Garzon"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^6.8",
+        "bramus/router": "~1.6",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}
