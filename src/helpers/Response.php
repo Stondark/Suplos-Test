@@ -12,10 +12,12 @@ class Response{
         return new self();
     }
 
-    public static function sendResponseJson(array $parameters, array $data = [], array $descError = []) : void {
+    public static function sendResponseJson(array $parameters, array $data = [], array|string $descError = [], bool $success = true) : void {
         $dataResponse["parameters"] = $parameters;
         $dataResponse["data"] = $data;
+        $dataResponse["success"] = $success;
         http_response_code(self::$statusCode);
+        header('Content-Type: application/json');
         // En caso de querer retornar un error o excepción
         if (!empty($descError) ) {
             $dataResponse["message"] = $descError;

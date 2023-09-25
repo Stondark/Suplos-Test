@@ -8,6 +8,7 @@ use PDO;
 
 class User{
 
+    private int $id;
     private string $username;
     private string $password;
 
@@ -19,20 +20,29 @@ class User{
     public static function getUser(string $username): User{
         try{
             $db = new Database();
-            $query = $db->connect()->prepare("SELECT username, password FROM users WHERE username = :username");
+            $query = $db->connect()->prepare("SELECT id_user, username, password FROM users WHERE username = :username");
             $query->execute([
                 "username" => $username
             ]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            return new User($data["username"], $data["password"]);
+            $user = new User($data["username"], $data["password"]);
+            $user->setID($data["id_user"]);
+            return $user;
         } catch(PDOException $e){
             throw new PDOException($e);
         }
     }
 
     public function comparePassword(string $password): bool{
-        error_log($password . $this->password);
         return password_verify($password, $this->password);
+    }
+
+    public function getID(){
+        return $this->id;
+    }
+
+    public function setID($value){
+        $this->id = $value;
     }
     
     public static function existUser(string $username) : bool{

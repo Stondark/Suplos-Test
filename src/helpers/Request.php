@@ -16,5 +16,15 @@ class Request{
         return getallheaders();
     }
 
+    public static function getAuthToken() : null|string{
+        $headers = self::getHeaders();
+        if(!isset($headers["Authorization"])){
+            return null;
+        }
+        $authHeader = $headers["Authorization"];
+
+        return explode(" ", $authHeader)[1];
+    }
+
 
 }

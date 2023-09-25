@@ -17,7 +17,7 @@ class AuthController
         // Validamos que el json que recibimos contiene estos dos valores
         if (!isset($requestJson["username"]) && !isset($requestJson["password"])) {
             return Response::statusCodeResponse(400)
-                ->sendResponseJson($requestJson, [], ["The parameters must not be empty."]);
+                ->sendResponseJson($requestJson, [], ["The parameters must not be empty."], false);
         }
 
         // Obtenemos los valores con los que validaremos el usuario
@@ -27,14 +27,14 @@ class AuthController
         // Validamos que el usuario exista en la base de datosmediante el nombre de usuario
         if (!User::existUser($username)) {
             return Response::statusCodeResponse(400)
-                ->sendResponseJson($requestJson, [], ["Username does not exist"]);
+                ->sendResponseJson($requestJson, [], ["Username does not exist"],false);
         }
         
-        // Obtenemos 
+        // Obtenemos la información del usuario y la comparamos con la guardada en la base de datos
         $user = User::getUser($username);
         if(!$user->comparePassword($password)){
             return Response::statusCodeResponse(400)
-                ->sendResponseJson($requestJson, [], ["Password does not match"]);
+                ->sendResponseJson($requestJson, [], ["Password does not match"], false);
         }
         $token = TokenGenerator::generateToken($username);
         return Response::statusCodeResponse(200)->sendResponseJson([], ["token" => $token]);
