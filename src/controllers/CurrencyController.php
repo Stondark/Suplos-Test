@@ -9,13 +9,13 @@ use Pipeg\Suplos\models\Currency;
 
 class CurrencyController{
 
+    // Función estática para obtener todos los 'tipos de moneda' en formato JSON
     public static function getAll(){
         try {
             $currencyData = Currency::getAllCurrency();
             if($currencyData){
                 return Response::statusCodeResponse(200)->sendResponseJson([], $currencyData);
             }
-            
             return Response::statusCodeResponse(400)->sendResponseJson([], [], "No encontramos información 
             en nuestra base de datos", false);
         } catch (Exception $e) {

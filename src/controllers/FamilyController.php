@@ -9,6 +9,7 @@ use Pipeg\Suplos\models\Family;
 
 class FamilyController{
 
+    // Función estática para obtener todas las 'familias' en formato JSON
     public static function getAll(){
         try {
             $familyData = Family::getAllFamily();
@@ -23,6 +24,8 @@ class FamilyController{
 
         }
     }
+
+    // Función estática para obtener una 'familia' por su id en formato JSON
     public static function getById(int|string $id){
         try {
             
@@ -42,6 +45,7 @@ class FamilyController{
         }
     }
 
+    // Función estática para obtener una 'familia' por su id de segmento relacionado en formato JSON
     public static function getByIdSegment(int|string $id){
         try {
             

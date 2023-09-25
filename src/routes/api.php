@@ -41,7 +41,7 @@ $router->get("/client/segments/family/(\d+)", function($id){ FamilyController::g
 $router->get("/client/segments/(\d+)/family", function($id){ FamilyController::getByIdSegment($id);});
 // Obtener las monedas registradas en la base de datos
 $router->get("/client/currency", [CurrencyController::class, 'getAll']);
-// Eventos
+// Obtener y crear los eventos/ofertas
 $router->get("/client/events", [EventController::class, 'getAll']);
 $router->get("/client/events/(\d+)", function($id){ EventController::getById($id);});
 $router->post("/client/events", [EventController::class, 'createEvent']);

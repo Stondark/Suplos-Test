@@ -36,6 +36,8 @@ class AuthController
             return Response::statusCodeResponse(400)
                 ->sendResponseJson($requestJson, [], ["Password does not match"], false);
         }
+
+        // Creamos el JWT pasándole como payload el username
         $token = TokenGenerator::generateToken($username);
         return Response::statusCodeResponse(200)->sendResponseJson([], ["token" => $token]);
     }

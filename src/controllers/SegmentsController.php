@@ -9,6 +9,7 @@ use Pipeg\Suplos\models\Segments;
 
 class SegmentsController{
 
+    // Función estática para obtener todos los 'segmentos' en formato JSON
     public static function getAll(){
         try {
             $segmentsData = Segments::getAllSegments();
@@ -24,6 +25,7 @@ class SegmentsController{
         }
     }
 
+    // Función estática para obtener un 'segmento' por su id en formato JSON
     public static function getById(int|string $id){
         try {
             
