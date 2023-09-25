@@ -3,6 +3,7 @@
 namespace Pipeg\Suplos\controllers;
 
 use Exception;
+use Pipeg\Suplos\helpers\ExcelGenerator;
 use Pipeg\Suplos\helpers\Request;
 use Pipeg\Suplos\helpers\Response;
 use Pipeg\Suplos\models\Activities;
@@ -18,13 +19,13 @@ class EventController{
     // Función estática para obtener todos los 'eventos' en formato JSON
     public static function getAll(){
         try {
-            $segmentsData = Event::getAllEvents();
-            if($segmentsData){
-                return Response::statusCodeResponse(200)->sendResponseJson([], $segmentsData);
+            $eventData = Event::getAllEvents();
+            if($eventData){
+                return Response::statusCodeResponse(200)->sendResponseJson([], $eventData);
             }
 
-            return Response::statusCodeResponse(400)->sendResponseJson([], [], "No encontramos información 
-            en nuestra base de datos", false);
+            return Response::statusCodeResponse(400)->sendResponseJson([], [], "We did not find information
+            in our database", false);
         } catch (Exception $e) {
             return Response::statusCodeResponse(400)->sendResponseJson([], [], $e->getMessage(), false);
 
@@ -59,7 +60,7 @@ class EventController{
             // Validamos que el json/array proveniente de la peticicón contenga estos valores, en caso de que no retornamos un 400
             if(!isset($requestJson["creator"]) && !isset($requestJson["family"]) && !isset($requestJson["segments"]) && !isset($requestJson["description"]) && !isset($requestJson["currency"]) && !isset($requestJson["object"]) && !isset($requestJson["budget"])){
                 return Response::statusCodeResponse(400)
-                ->sendResponseJson($requestJson, [], ["The parameters must not be empty."], false);
+                ->sendResponseJson(array($requestJson), [], ["The parameters must not be empty."], false);
             }
 
             // Asignamos todos los valores a las siguientes variabls
@@ -101,7 +102,18 @@ class EventController{
                 return Response::statusCodeResponse(400)
                 ->sendResponseJson($requestJson, [], ["This type of family does not exist."],false);
             }
-    
+            // Validamos que la relación sea válida
+            if(is_null(Activities::validActivities($segmentsId, $familyId))){
+                return Response::statusCodeResponse(400)
+                ->sendResponseJson($requestJson, [], ["This is not a valid activity."],false);
+            }
+
+            $activitiesId = Activities::getIdActivities($segmentsId, $familyId);
+            // Validamos que si no existe esa combinación de actividad, la guardamos
+            if(is_null($activitiesId)){
+                $activitiesId = Activities::saveActivities($segmentsId, $familyId);
+            }
+
             // Guardamos el cronograma en la base de datos y validamos que se haya guardado correctamente
             // e igualmente en caso de ser éxitoso, obtenemos el id devuelto para añadirlo como relación
             $scheduleId = EventSchedule::saveSchedule($start_date, $start_time, $end_date, $end_time);
@@ -110,9 +122,8 @@ class EventController{
                 ->sendResponseJson($requestJson, [], ["Fail to save the Schedule."],false);
             }
 
-            // Guardamos la actividad con su SegmentId y FamilyId
-            $activitiesId = Activities::saveActivities($segmentsId, $familyId);
-    
+
+
             // Asignamos todos los valores al nuevo objeto de Event
             $event = new Event();
             $event->idCreator = $idCreator;
@@ -132,6 +143,34 @@ class EventController{
         } catch (Exception $e) {
             return Response::statusCodeResponse(400)->sendResponseJson([], [], $e->getMessage(), false);
         }
+    }
+
+
+    public static function getReportEvents(){
+        $now = date("Y-m-d-H-i-s");
+        $reportName = "Events-Report-$now";
+        $excel = new ExcelGenerator($reportName);
+        $headers = [];
+        $data = Event::getAllEvents();
+        if(!$data){
+            return Response::statusCodeResponse(400)->sendResponseJson([], [], "We did not find information
+            in our database", false);
+        }
+
+        foreach ($data[0] as $key => $value) {
+            $headers[] = $key;
+        } 
+
+        $excel->setHeaders($headers)->writeInfoFromArray($data);
+        $fileExcel = $excel->saveFile();
+        if($fileExcel["success"]){
+            $urlFile = $_SERVER['HTTP_HOST'] . "/" . $fileExcel["route"];
+            return Response::statusCodeResponse(200)->sendResponseJson([], ["url" => $urlFile, "message" => $fileExcel["message"]]);
+        }
+
+        return Response::statusCodeResponse(400)->sendResponseJson([], [], $fileExcel["message"], false);
+
+
     }
 
 }

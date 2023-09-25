@@ -45,5 +45,6 @@ $router->get("/client/currency", [CurrencyController::class, 'getAll']);
 $router->get("/client/events", [EventController::class, 'getAll']);
 $router->get("/client/events/(\d+)", function($id){ EventController::getById($id);});
 $router->post("/client/events", [EventController::class, 'createEvent']);
+$router->get("/client/events/report", [EventController::class, 'getReportEvents']);
 
 $router->run();
