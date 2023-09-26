@@ -84,7 +84,14 @@ class EventController{
             }
             // En caso de que exista obtenemos el usuario y su ID
             $idCreator = User::getUser($usernameCreator)->getID();
-    
+
+            // Validamos el identificador (objeto) que recibimos
+
+            if(!is_null(Event::getByObject($object))){
+                return Response::statusCodeResponse(400)
+                    ->sendResponseJson($requestJson, [], ["The object already exist."],false);
+            }
+
             // Validamos que el tipo de moneda en la petición exista
             if(is_null(Currency::getAllCurrencyById($currency))){
                 return Response::statusCodeResponse(400)
@@ -121,8 +128,6 @@ class EventController{
                 return Response::statusCodeResponse(400)
                 ->sendResponseJson($requestJson, [], ["Fail to save the Schedule."],false);
             }
-
-
 
             // Asignamos todos los valores al nuevo objeto de Event
             $event = new Event();
@@ -172,5 +177,6 @@ class EventController{
 
 
     }
+
 
 }

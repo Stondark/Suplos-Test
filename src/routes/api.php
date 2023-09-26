@@ -8,29 +8,22 @@ use Pipeg\Suplos\controllers\EventController;
 use Pipeg\Suplos\controllers\FamilyController;
 use Pipeg\Suplos\controllers\SegmentsController;
 use Pipeg\Suplos\controllers\TokenController;
-use Pipeg\Suplos\models\Segments;
+use Pipeg\Suplos\helpers\Response;
 
 $dotenv = Dotenv\Dotenv::createImmutable("src/config");
 $dotenv->load();
 
 $router = new Router();
 
-// Enviar los encabezados a todas las respuestas y rutas con el método GET|POST
-$router->before('GET|POST', '/.*', function() {
-    header('Access-Control-Allow-Origin: http://localhost:3000');
-    header('Access-Control-Allow-Methods: GET, POST');
-});
-
+// Seteamos los cors headers
+$router->before('GET|POST', '/.*', [Response::class, 'setHeadersCors']);
+$router->options('/.*', [Response::class, 'setHeadersCors']);
 // Validamos el token
-
 $router->before('GET|POST', '/client/.*', [TokenController::class, 'validHeaderToken']);
 
 // Rutas
-
 // Login
 $router->post("/auth", [AuthController::class, 'login']);
-
-
 
 // segments
 $router->get("/client/segments", [SegmentsController::class, 'getAll']);

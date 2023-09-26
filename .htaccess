@@ -1,5 +1,6 @@
 Options All -Indexes
 Options -MultiViews
+Header set Access-Control-Allow-Origin "*"
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
