@@ -38,6 +38,11 @@ Los requisitos para correr este proyecto son:
   cd C:\xampp\htdocs\Suplos-Test
 ```
 
+- Instala las librerías
+```bash
+    composer install --ignore-platform-req=ext-gd
+```
+
 - Ejecuta el comando
 ```bash
     php -S localhost:3000
