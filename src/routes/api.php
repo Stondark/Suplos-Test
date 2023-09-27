@@ -24,6 +24,7 @@ $router->before('GET|POST', '/client/.*', [TokenController::class, 'validHeaderT
 // Rutas
 // Login
 $router->post("/auth", [AuthController::class, 'login']);
+$router->get("/validToken", [AuthController::class, 'validateJwt']);
 
 // segments
 $router->get("/client/segments", [SegmentsController::class, 'getAll']);
@@ -37,6 +38,7 @@ $router->get("/client/currency", [CurrencyController::class, 'getAll']);
 // Obtener y crear los eventos/ofertas
 $router->get("/client/events", [EventController::class, 'getAll']);
 $router->get("/client/events/(\d+)", function($id){ EventController::getById($id);});
+$router->post("/client/events/(\d+)/upload", function($id){ EventController::uploadDocument($id);});
 $router->post("/client/events", [EventController::class, 'createEvent']);
 $router->get("/client/events/report", [EventController::class, 'getReportEvents']);
 

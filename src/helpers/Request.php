@@ -16,6 +16,13 @@ class Request{
         return getallheaders();
     }
 
+    public static function getFiles(string $param) : array|null{
+        if(!isset($_FILES[$param])){
+            return NULL;
+        }
+        return $_FILES[$param];
+    }
+
     public static function getAuthToken() : null|string{
         $headers = self::getHeaders();
         if(!isset($headers["Authorization"])){

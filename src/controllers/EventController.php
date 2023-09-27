@@ -13,6 +13,7 @@ use Pipeg\Suplos\models\EventSchedule;
 use Pipeg\Suplos\models\Family;
 use Pipeg\Suplos\models\Segments;
 use Pipeg\Suplos\models\User;
+use Pipeg\Suplos\utils\ImagesUtils;
 
 class EventController{
 
@@ -42,7 +43,8 @@ class EventController{
 
             $familyData = Event::getByIdEvent(intval($id));
             if(is_null($familyData)){
-                return Response::statusCodeResponse(400)->sendResponseJson([$id], [], "No se encontró un registro en la base de datos", false);
+                return Response::statusCodeResponse(400)->sendResponseJson([$id], [], "We did not find information
+            in our database", false);
             }
 
             return Response::statusCodeResponse(200)->sendResponseJson([$id], $familyData);
@@ -150,6 +152,34 @@ class EventController{
         }
     }
 
+    public static function uploadDocument(int|string $id){
+        try {
+            $eventData = Event::getByIdEvent(intval($id));
+            if(is_null($eventData)){
+                return Response::statusCodeResponse(400)->sendResponseJson([$id], [], "We did not find information
+                in our database", false);
+            }
+    
+            $files = Request::getFiles('document');
+            $moveFile = ImagesUtils::storeFile($files);
+    
+            if(!$moveFile){
+                return Response::statusCodeResponse(400)->sendResponseJson([$files], [], "Failure to obtain document.", false);
+            }
+
+            $saveRecordFile = Event::saveDocumentEvent($id, $moveFile);
+            if($saveRecordFile){
+                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+                $urlFile = $protocol . $_SERVER['HTTP_HOST'] . "/" . $moveFile;
+                return Response::statusCodeResponse(200)->sendResponseJson([], ["url" => $urlFile]);
+            }
+
+        } catch (Exception $e) {
+            return Response::statusCodeResponse(400)->sendResponseJson([$files], [], $e->getMessage(), false);
+        }
+
+
+    }
 
     public static function getReportEvents(){
         $now = date("Y-m-d-H-i-s");
@@ -169,7 +199,8 @@ class EventController{
         $excel->setHeaders($headers)->writeInfoFromArray($data);
         $fileExcel = $excel->saveFile();
         if($fileExcel["success"]){
-            $urlFile = $_SERVER['HTTP_HOST'] . "/" . $fileExcel["route"];
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+            $urlFile = $protocol . $_SERVER['HTTP_HOST'] . "/" . $fileExcel["route"];
             return Response::statusCodeResponse(200)->sendResponseJson([], ["url" => $urlFile, "message" => $fileExcel["message"]]);
         }
 

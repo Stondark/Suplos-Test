@@ -20,7 +20,7 @@ class Event{
         try{
             $db = new Database();
             $query = $db->connect()->prepare(
-                "SELECT eo.id, u.username, eos.full_start_date, eos.full_end_date, sta.status, eo.object, eo.budget, 
+                "SELECT eo.id, u.username, eos.full_start_date, eo.description, eos.full_end_date, sta.status, eo.object, eo.budget, 
                 seg.description_segment, fam.description_family, cur.currency_type 
                 FROM event_offers eo 
                 INNER JOIN users u ON u.id_user = eo.id_creator 
@@ -41,7 +41,7 @@ class Event{
         try{
             $db = new Database();
             $query = $db->connect()->prepare(
-                "SELECT eo.id, u.username, eos.full_start_date, eos.full_end_date, sta.status, eo.object, eo.budget, 
+                "SELECT eo.id, u.username, eos.full_start_date, eo.description, eos.full_end_date, sta.status, eo.object, eo.budget, 
                 seg.description_segment, fam.description_family, cur.currency_type 
                 FROM event_offers eo 
                 INNER JOIN users u ON u.id_user = eo.id_creator 
@@ -67,7 +67,7 @@ class Event{
         try{
             $db = new Database();
             $query = $db->connect()->prepare(
-                "SELECT eo.id, u.username, eos.full_start_date, eos.full_end_date, sta.status, eo.object, eo.budget, 
+                "SELECT eo.id, u.username, eos.full_start_date, eos.full_end_date, eo.description, sta.status, eo.object, eo.budget, 
                 seg.description_segment, fam.description_family, cur.currency_type 
                 FROM event_offers eo 
                 INNER JOIN users u ON u.id_user = eo.id_creator 
@@ -105,8 +105,19 @@ class Event{
             return $query;
         } catch(PDOException $e){
             throw new PDOException($e);
-        }
-        
+        }   
+    }
+
+    public static function saveDocumentEvent(string $id, string $route){
+        try {
+            $db = new Database();
+            $query = $db->connect()->prepare("INSERT INTO `event_offers_docs` (`id`, `route_doc`, `id_event_offers`) VALUES (NULL, :route, :id_event);");
+            $query->execute(["route" => $route,
+                            "id_event" => $id]);
+            return $query;
+        } catch(PDOException $e){
+            throw new PDOException($e);
+        }   
     }
 
 }
