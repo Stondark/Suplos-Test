@@ -177,9 +177,61 @@ class EventController{
         } catch (Exception $e) {
             return Response::statusCodeResponse(400)->sendResponseJson([$files], [], $e->getMessage(), false);
         }
-
-
     }
+
+    public static function getUploadDocuments(int|string $id){
+        try {
+            $routeFiles = Event::getDocumentEvent($id);
+            if(is_null($routeFiles)){
+                return Response::statusCodeResponse(400)->sendResponseJson([$id], [], "We did not find information
+                in our database", false);
+            }
+            $urlsArray = [];
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+            foreach ($routeFiles as $key => $value) {
+                $urlsArray[] = $protocol . $_SERVER['HTTP_HOST'] . "/" . $value["route_doc"];
+            }
+            
+            if(count($urlsArray) >= 1){
+                return Response::statusCodeResponse(200)->sendResponseJson([$id], $urlsArray);
+            }
+
+            return Response::statusCodeResponse(400)->sendResponseJson([$id], [], 'Fail to create url docs.', false);            
+
+        } catch (Exception $e) {
+            return Response::statusCodeResponse(400)->sendResponseJson([$id], [], $e->getMessage(), false);
+        }
+    }
+
+    public static function updateStatusEvent(){
+        try {
+            $allEvents = Event::getAllScheduleEvents();
+            if(is_null($allEvents)){
+                return Response::statusCodeResponse(400)->sendResponseJson([], [], 'There is no event that meets the conditions.', false);            
+            }
+            $eventsUpdate = 0;
+            $totalEvents = 0;
+            foreach ($allEvents as $key => $value) {
+                $totalEvents++;
+                $resultUpdate = Event::updateScheduleEvent($value["estado"], $value["id"]);
+                if($resultUpdate){
+                    $eventsUpdate++;
+                }
+            }
+    
+            if($totalEvents != $eventsUpdate){
+                return Response::statusCodeResponse(400)->sendResponseJson([], ["totalEvents" => $totalEvents, "eventsUpdate" => $eventsUpdate], 'Fail to update all events status', false);            
+            }
+    
+            return Response::statusCodeResponse(200)->sendResponseJson([], ["totalEvents" => $totalEvents, "eventsUpdate" => $eventsUpdate]);
+    
+        } catch (Exception $e) {
+            return Response::statusCodeResponse(400)->sendResponseJson([], [], $e->getMessage(), false);
+
+        }
+        
+    }
+
 
     public static function getReportEvents(){
         $now = date("Y-m-d-H-i-s");

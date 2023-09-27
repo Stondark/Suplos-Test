@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2023 a las 17:46:22
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 27-09-2023 a las 19:23:27
+-- Versión del servidor: 10.4.24-MariaDB
+-- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,18 +31,7 @@ CREATE TABLE `activities` (
   `id` int(11) NOT NULL,
   `id_segments` int(11) NOT NULL,
   `id_family` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `activities`
---
-
-INSERT INTO `activities` (`id`, `id_segments`, `id_family`) VALUES
-(2, 10, 1011),
-(3, 10, 1011),
-(4, 10, 1011),
-(5, 10, 1011),
-(1, 80, 1010);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -53,7 +42,7 @@ INSERT INTO `activities` (`id`, `id_segments`, `id_family`) VALUES
 CREATE TABLE `currency` (
   `id` int(11) NOT NULL,
   `currency_type` varchar(64) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `currency`
@@ -80,16 +69,7 @@ CREATE TABLE `event_offers` (
   `id_currency` int(11) NOT NULL,
   `object` varchar(12) NOT NULL,
   `budget` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `event_offers`
---
-
-INSERT INTO `event_offers` (`id`, `id_creator`, `id_event_offers_schedule`, `id_status`, `id_activity`, `description`, `id_currency`, `object`, `budget`) VALUES
-(1, 1, NULL, 1, 1, 'Hola, esto es una prueba', 1, 'ABC123', '250.000'),
-(2, 1, 13, 1, 3, 'Prueba Api', 1, 'ABC1234', '3500'),
-(4, 1, 15, 1, 5, 'Prueba Api', 1, 'ABC123XDD', '3500');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -101,7 +81,7 @@ CREATE TABLE `event_offers_docs` (
   `id` int(11) NOT NULL,
   `route_doc` varchar(240) NOT NULL,
   `id_event_offers` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -117,28 +97,7 @@ CREATE TABLE `event_offers_schedule` (
   `end_time` time NOT NULL,
   `full_start_date` datetime NOT NULL,
   `full_end_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `event_offers_schedule`
---
-
-INSERT INTO `event_offers_schedule` (`id`, `start_date`, `start_time`, `end_date`, `end_time`, `full_start_date`, `full_end_date`) VALUES
-(1, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(2, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(3, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(4, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(5, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(6, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(7, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(8, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(9, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(10, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(11, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(12, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(13, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(14, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00'),
-(15, '2023-09-30', '13:30:00', '2023-10-30', '13:30:00', '2023-09-30 13:30:00', '2023-10-30 13:30:00');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -150,7 +109,7 @@ CREATE TABLE `family` (
   `id` int(11) NOT NULL,
   `description_family` varchar(120) NOT NULL,
   `id_segment` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `family`
@@ -587,7 +546,7 @@ INSERT INTO `family` (`id`, `description_family`, `id_segment`) VALUES
 CREATE TABLE `segments` (
   `id` int(11) NOT NULL,
   `description_segment` varchar(240) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `segments`
@@ -660,7 +619,7 @@ INSERT INTO `segments` (`id`, `description_segment`) VALUES
 CREATE TABLE `status` (
   `id` int(11) NOT NULL,
   `status` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `status`
@@ -682,7 +641,7 @@ CREATE TABLE `users` (
   `username` varchar(60) NOT NULL,
   `password` varchar(120) NOT NULL,
   `fullname` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -767,7 +726,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `currency`
@@ -779,13 +738,19 @@ ALTER TABLE `currency`
 -- AUTO_INCREMENT de la tabla `event_offers`
 --
 ALTER TABLE `event_offers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `event_offers_docs`
+--
+ALTER TABLE `event_offers_docs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `event_offers_schedule`
 --
 ALTER TABLE `event_offers_schedule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `family`

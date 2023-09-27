@@ -37,9 +37,12 @@ $router->get("/client/segments/(\d+)/family", function($id){ FamilyController::g
 $router->get("/client/currency", [CurrencyController::class, 'getAll']);
 // Obtener y crear los eventos/ofertas
 $router->get("/client/events", [EventController::class, 'getAll']);
-$router->get("/client/events/(\d+)", function($id){ EventController::getById($id);});
-$router->post("/client/events/(\d+)/upload", function($id){ EventController::uploadDocument($id);});
 $router->post("/client/events", [EventController::class, 'createEvent']);
 $router->get("/client/events/report", [EventController::class, 'getReportEvents']);
+$router->get("/client/events/status", [EventController::class, 'updateStatusEvent']);
+$router->get("/client/events/(\d+)", function($id){ EventController::getById($id);});
+$router->post("/client/events/(\d+)/upload", function($id){ EventController::uploadDocument($id);});
+$router->get("/client/events/(\d+)/documents", function($id){ EventController::getUploadDocuments($id);});
+
 
 $router->run();
