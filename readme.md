@@ -47,3 +47,7 @@ Los requisitos para correr este proyecto son:
 ```bash
     php -S localhost:3000
 ```
+Ahora prueba las peticiones desde Postman con:
+```bash
+    https://www.postman.com/supply-engineer-8253701/workspace/public-collections/collection/17795589-21e57f6d-63bc-41e7-88d1-fd3fdaceb2fb?action=share&creator=17795589
+```
